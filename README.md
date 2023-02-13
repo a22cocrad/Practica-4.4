@@ -14,10 +14,6 @@
 - Comandos
 - Creación y conexión al cluster
 
-
-El objetivo de esta práctica es montar TRES servidores web con el mismo contenido. Este contenido debe estar alojado en un servicio AWS EFS y sincronizado en todos los servidores mediante el protocolo NFS.
-Como segundo objetivo, debemos montar un balanceador de carga que reparta dicha carga entre los tres servidores.
-
 1. Comenzamos creando los siguientes 3 grupos de seguridad.
    - SGWEB (Puerto 80 desde IP del Balanceador, 22 desde Todas)
  
