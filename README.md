@@ -13,6 +13,7 @@
 - Conexión a las instancias
 - Comandos
 - Creación y conexión al cluster
+- Configuración del sitio web
 
 
 1. Comenzamos creando los siguientes 3 grupos de seguridad.
@@ -40,15 +41,15 @@ La configuración será la siguiente:
 	 systemctl reboot
 	 ```
 
-1. Por ultimo crearemos la EC2 del balanceador con la misma configuración anterior con los siguientes cambios:
+3. Por ultimo crearemos la EC2 del balanceador con la misma configuración anterior con los siguientes cambios:
    - Grupo de Seguridad Load Balancer
    - Asignamos IP Elástica
 
-2. Creamos el Sistema de Archivos EFS:
+4. Creamos el Sistema de Archivos EFS:
    - Guardamos el nombre de DNS
    - Red > Administrar > Grupos de Seguridad > Cambiamos "Default" por "FS"
 
-3. Entramos en cada uno de los nodos del cluster mediante SSH:
+5. Entramos en cada uno de los nodos del cluster mediante SSH:
 
    - Creamos la carpteta nfs-mount en la dirección /var/www/html/
    - Sincronizamos el contenido del contenedor NFS con esta carpeta
@@ -60,7 +61,7 @@ sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retr
    - Modificamos el archivo /etc/apache2/sites-enabled/000-default.conf
      - Cambiamos el Document Root, agregando el directorio /nfs-mount al final de la línea para evitar que nos salga en la barra de navegación información innecesaria.
 
-1. Entramos al balanceador de carga mediante SSH:
+6. Entramos al balanceador de carga mediante SSH:
    - Instalamos los siguientes plugins de apache
 ```
 sudo a2enmod proxy proxy_http proxy_balancer lbmethod_bytraffic lbmethor_byrequests
@@ -80,6 +81,19 @@ sudo a2enmod proxy proxy_http proxy_balancer lbmethod_bytraffic lbmethor_byreque
    	ProxyPass / balancer://mycluster/
    	ProxyPassReverse / balancer://mycluster/
 ```
+
+7. Configuramos el sitio web con los siguientes archivos
+
+Index: ![Index](index.png)
+
+Conexión: ![Conexión](conexion.png)
+
+Grabar: ![Grabar1](grabar1.png)
+![Grabar2](grabar2.png)
+
+Formulario: ![Formulario1](formulario1.png)
+![Formulario2](formulario2.png)
+
 
 
 Bibliografía: https://github.com/santos-pardos/Hands-On-Lab-in-AWS/blob/main/Storage/EFS/requirements.md
