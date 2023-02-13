@@ -32,7 +32,8 @@ La configuración será la siguiente:
    - Grupo de Seguridad WEB
    - Detalles Avanzados > Datos de Usuario
   
-	```#!/bin/bash
+	```
+	#!/bin/bash
 	 apt update
 	 apt install apache2 -y
 	 apt install nfs-utils
@@ -51,16 +52,23 @@ La configuración será la siguiente:
 
    - Creamos la carpteta nfs-mount en la dirección /var/www/html/
    - Sincronizamos el contenido del contenedor NFS con esta carpeta
-     - ```sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-03689917b85f6eef4.efs.us-east-1.amazonaws.com:/ /var/www/html/nfs-mount``` Sustituyendo la DNS con la respectiva del EFS.
+```
+sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-03689917b85f6eef4.efs.us-east-1.amazonaws.com:/ /var/www/html/nfs-mount
+```
+ Sustituyendo la DNS con la respectiva del EFS.
+
    - Modificamos el archivo /etc/apache2/sites-enabled/000-default.conf
      - Cambiamos el Document Root, agregando el directorio /nfs-mount al final de la línea para evitar que nos salga en la barra de navegación información innecesaria.
 
-4. Entramos al balanceador de carga mediante SSH:
+1. Entramos al balanceador de carga mediante SSH:
    - Instalamos los siguientes plugins de apache
-     - ```sudo a2enmod proxy proxy_http proxy_balancer lbmethod_bytraffic lbmethor_byrequests```
+```
+sudo a2enmod proxy proxy_http proxy_balancer lbmethod_bytraffic lbmethor_byrequests
+```
    - Modificamos el fichero /etc/apache2/sites-enabled/000-default.conf añadiendo la siguiente configuración. En IP deberemos poner la IP de nuestras máquinas independientes.
   
-```<Location /balancer-manager>
+```
+<Location /balancer-manager>
  			SetHandler balancer-manager
    	</Location>
    	ProxyPass /balancer-manager !
